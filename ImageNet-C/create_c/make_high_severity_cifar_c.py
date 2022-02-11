@@ -238,7 +238,7 @@ def fog(x, severity=1):
 def frost(x, severity=1):
     c = [(1, 0.2), (1, 0.3), (0.9, 0.4), (0.85, 0.4), (0.75, 0.45), (0.65, 0.5), (0.55, 0.55), (0.5, 0.6), (0.45, 0.65), (0.4, 0.7)][severity - 1]
     idx = np.random.randint(5)
-    filename = ['./frost1.png', './frost2.png', './frost3.png', './frost4.jpg', './frost5.jpg', './frost6.jpg'][idx]
+    filename = [repo_path+'frost1.png', repo_path+'frost2.png', repo_path+'frost3.png', repo_path+'frost4.jpg', repo_path+'frost5.jpg', repo_path+'frost6.jpg'][idx]
     frost = cv2.imread(filename)
     frost = cv2.resize(frost, (0, 0), fx=0.2, fy=0.2)
     # randomly crop and convert to rgb
@@ -457,10 +457,12 @@ d['Gaussian Blur'] = gaussian_blur
 d['Spatter'] = spatter
 d['Saturate'] = saturate
 
+repo_path = '/rds/general/user/ik2318/home/robustness/ImageNet-C/create_c/'
+# repo_path = 'C:\\Users\\sarfi\\Desktop\\robustness\\ImageNet-C\\create_c\\'
 test_data_path = '/rds/general/user/ik2318/home/cifar/test/'
 # test_data_path = 'C:\\Users\\sarfi\\Desktop\\data\\cifar\\test'
 save_path = '/rds/general/user/ik2318/ephemeral/high_severity_CIFAR10_C'
-# save_path = 'C:\\Users\\sarfi\\Desktop\\'
+# save_path = 'C:\\Users\\sarfi\\Desktop\\high_severity_CIFAR10_C\\'
 
 test_data = dset.CIFAR10(test_data_path, train=False)
 convert_img = trn.Compose([trn.ToTensor(), trn.ToPILImage()])

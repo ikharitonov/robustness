@@ -80,7 +80,7 @@ def default_loader(path):
 
 class DistortImageFolder(data.Dataset):
     def __init__(self, root, save_path, method, severity, transform=None, target_transform=None,
-                 loader=default_loader):
+                 loader=default_loader,slash='/'):
         classes, class_to_idx = find_classes(root)
         imgs = make_dataset(root, class_to_idx)
         if len(imgs) == 0:
@@ -98,6 +98,7 @@ class DistortImageFolder(data.Dataset):
         self.transform = transform
         self.target_transform = target_transform
         self.loader = loader
+        self.slash = slash
 
         self.save_path = save_path
 
@@ -113,12 +114,12 @@ class DistortImageFolder(data.Dataset):
         # save_path = '/share/data/vision-greg/DistortedImageNet/JPEG/' + self.method.__name__ + \
         #             '/' + str(self.severity) + '/' + self.idx_to_class[target]
         save_path = self.save_path + self.method.__name__ + \
-                    '/' + str(self.severity) + '/' + self.idx_to_class[target]
+                    self.slash + str(self.severity) + self.slash + self.idx_to_class[target]
 
         if not os.path.exists(save_path):
             os.makedirs(save_path)
 
-        save_path += path[path.rindex('/'):]
+        save_path += path[path.rindex(self.slash):]
 
         Image.fromarray(np.uint8(img)).save(save_path, quality=85, optimize=True)
 
@@ -408,7 +409,7 @@ def frost(x, severity=1):
          (0.4, 0.9),
          (0.35, 0.95)][severity - 1]
     idx = np.random.randint(5)
-    filename = ['./frost1.png', './frost2.png', './frost3.png', './frost4.jpg', './frost5.jpg', './frost6.jpg'][idx]
+    filename = [repo_path+'frost1.png', repo_path+'frost2.png', repo_path+'frost3.png', repo_path+'frost4.jpg', repo_path+'frost5.jpg', repo_path+'frost6.jpg'][idx]
     frost = cv2.imread(filename)
     # randomly crop and convert to rgb
     x_start, y_start = np.random.randint(0, frost.shape[0] - 224), np.random.randint(0, frost.shape[1] - 224)
@@ -602,10 +603,14 @@ def elastic_transform(image, severity=1):
 
 # /////////////// Further Setup ///////////////
 
+repo_path = '/rds/general/user/ik2318/home/robustness/ImageNet-C/create_c/'
+# repo_path = 'C:\\Users\\sarfi\\Desktop\\robustness\\ImageNet-C\\create_c\\'
 test_data_path = '/rds/general/user/ik2318/ephemeral/imagenette2/val'
 # test_data_path = 'C:\\Users\\sarfi\\Desktop\\data\\imagenet\\val'
 save_path = '/rds/general/user/ik2318/ephemeral/high_severity_imagenette_C/'
 # save_path = 'C:\\Users\\sarfi\\Desktop\\high_severity_imagenette_C\\'
+slash = '/'
+# slash = '\\'
 
 def save_distorted(method=gaussian_noise):
     for severity in range(1, 11):
@@ -614,9 +619,9 @@ def save_distorted(method=gaussian_noise):
             root=test_data_path,
             save_path=save_path,
             method=method, severity=severity,
-            transform=trn.Compose([trn.Resize(256), trn.CenterCrop(224)]))
+            transform=trn.Compose([trn.Resize(256), trn.CenterCrop(224)]),slash=slash)
         distorted_dataset_loader = torch.utils.data.DataLoader(
-            distorted_dataset, batch_size=100, shuffle=False, num_workers=4)
+            distorted_dataset, batch_size=100, shuffle=False, num_workers=0)
 
         for _ in distorted_dataset_loader: continue
 
