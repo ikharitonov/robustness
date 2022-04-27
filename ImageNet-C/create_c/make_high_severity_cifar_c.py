@@ -440,7 +440,7 @@ d['Gaussian Noise'] = gaussian_noise
 d['Shot Noise'] = shot_noise
 d['Impulse Noise'] = impulse_noise
 d['Defocus Blur'] = defocus_blur
-d['Glass Blur'] = glass_blur #STOPPED HERE
+d['Glass Blur'] = glass_blur
 d['Motion Blur'] = motion_blur
 d['Zoom Blur'] = zoom_blur
 d['Snow'] = snow
@@ -461,7 +461,7 @@ repo_path = '/rds/general/user/ik2318/home/robustness/ImageNet-C/create_c/'
 # repo_path = 'C:\\Users\\sarfi\\Desktop\\robustness\\ImageNet-C\\create_c\\'
 test_data_path = '/rds/general/user/ik2318/home/cifar/test/'
 # test_data_path = 'C:\\Users\\sarfi\\Desktop\\data\\cifar\\test'
-save_path = '/rds/general/user/ik2318/ephemeral/high_severity_CIFAR10_C'
+save_path = '/rds/general/user/ik2318/ephemeral/high_severity_CIFAR10_C/'
 # save_path = 'C:\\Users\\sarfi\\Desktop\\high_severity_CIFAR10_C\\'
 
 test_data = dset.CIFAR10(test_data_path, train=False)
